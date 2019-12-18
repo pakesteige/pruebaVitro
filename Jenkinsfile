@@ -25,7 +25,7 @@ pipeline {
             steps {
 
                 withMaven(
-                        jdk: "1.8"
+                        jdk: "1.8",
                         maven: "M3",
                         options: [
                                 artifactsPublisher(disabled: build.skipArtifacts),
