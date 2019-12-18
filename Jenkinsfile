@@ -38,29 +38,6 @@ pipeline {
 
             }
         }
-        stage('Testing') {
-            steps {
-                try {
-                    withMaven(
-                            jdk: "1.8",
-                            maven: "M3",
-                            options: [
-                                    artifactsPublisher(disabled: true),
-                                    findbugsPublisher(disabled: true),
-                                    openTasksPublisher(disabled: true)]) {
 
-                        bat('mvn -f pom.xml org.jacoco:jacoco-maven-plugin:prepare-agent  test -Dmaven.javadoc.skip=true -fae -Dmaven.test.failure.ignore=false')
-                    }
-                } catch (err) {
-                    echo 'Testing failed!'
-                    def sw = new StringWriter()
-                    def pw = new PrintWriter(sw)
-                    err.printStackTrace(pw)
-                    echo sw.toString()
-                    currentBuild.result = 'UNSTABLE'
-                }
-            }
-
-        }
     }
 }
