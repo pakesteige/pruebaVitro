@@ -29,4 +29,4 @@ La documentación del proyecto creada con javadoc está en la ruta target\site\d
 Se ha integrado la prueba con Serenity para la presentación del resultado del test, el resultado se guardará en el directorio target\site\serenity de la carpeta del proyecto
 
 ###Jenkins
-
+Fichero de tipo pipeline Jenkinsfile para lanzar la tarea programada de tipo pipeline desde jenkins
