@@ -13,8 +13,20 @@ import vitro.utilidad.UtilSelenium;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Clase ResultAndLotService
+ * Describe los pasos detallados de la clase ResultAndLot
+ *
+ * @author paco
+ * @version 1.0
+ */
 public class ResultAndLotService extends Base {
 
+    /**
+     * Rellenar el formulario del submenú Manual Result Input
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param manualResultInput objeto con los atributos del formulario de búsqueda del submenú Manual Result Input
+     */
     public void buscarManualResultInput(UtilSelenium utilSelenium, ManualResultInput manualResultInput) {
         utilSelenium.getLogger().info("-- BUSCAR COMPONENTES EN MANUAL RESULT INPUT - INICIO");
         try {
@@ -25,6 +37,7 @@ public class ResultAndLotService extends Base {
             cumplimentarControlLevelVialLot(utilSelenium, manualResultInput.getControlLevelVialLot());
             cumplimentarAnalyte(utilSelenium, manualResultInput.getAnalyte());
             utilSelenium.getLogger().info("Pulsar en el botón Apply");
+            utilSelenium.esperarSegundos(3);
             utilSelenium.getDriver().findElement(By.id(CamposResultAndLot.BTN_APPLY.getTexto())).click();
             utilSelenium.esperarHastaElementoVisible(By.id(CamposResultAndLot.TBL_RESULTADOS.getTexto()));
             utilSelenium.esperarSegundos(20);
@@ -37,6 +50,11 @@ public class ResultAndLotService extends Base {
         }
     }
 
+    /**
+     * Rellena el campo From Date del formulario
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param fromDate campo From Date del formulario de búsqueda
+     */
     private void cumplimentarFromDate(UtilSelenium utilSelenium, String fromDate) {
         try {
             if (fromDate != null && !fromDate.equals("")) {
@@ -49,6 +67,11 @@ public class ResultAndLotService extends Base {
         }
     }
 
+    /**
+     * Rellena el campo To Date del formulario
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param toDate campo To Date del formulario de búsqueda
+     */
     private void cumplimentarToDate(UtilSelenium utilSelenium, String toDate) {
         try {
             if (toDate != null && !toDate.equals("")) {
@@ -61,6 +84,11 @@ public class ResultAndLotService extends Base {
         }
     }
 
+    /**
+     * Rellena el campo Lab./Dep./Inst del formulario
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param labDepInst campo Lab./Dep./Inst del formulario de búsqueda
+     */
     private void cumplimentarLabDepInst(UtilSelenium utilSelenium, String labDepInst) {
         try {
             if (labDepInst != null && !labDepInst.equals("")) {
@@ -85,6 +113,11 @@ public class ResultAndLotService extends Base {
         }
     }
 
+    /**
+     * Rellena el campo Control/Level/Vial Lot del formulario
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param controlLevelVialLot campo Control/Level/Vial Lot del formulario de búsqueda
+     */
     private void cumplimentarControlLevelVialLot(UtilSelenium utilSelenium, String controlLevelVialLot) {
         try {
             if (controlLevelVialLot != null && !controlLevelVialLot.equals("")) {
@@ -106,6 +139,11 @@ public class ResultAndLotService extends Base {
         }
     }
 
+    /**
+     * Rellena el campo Analyte del formulario
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param analyte campo Analyte del formulario de búsqueda
+     */
     private void cumplimentarAnalyte(UtilSelenium utilSelenium, String analyte) {
         try {
             if (analyte != null && !analyte.equals("")) {
@@ -127,6 +165,11 @@ public class ResultAndLotService extends Base {
         }
     }
 
+    /**
+     *  Comprobar que el total de registros se corresponde con el total esperado
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param total número total de registros que tiene que mostrar la búsqueda
+     */
     public void comprobarResultado(UtilSelenium utilSelenium, String total) {
         utilSelenium.getLogger().info("-- COMPROBAR RESULTADO - INICIO");
         boolean resultado = Boolean.FALSE;

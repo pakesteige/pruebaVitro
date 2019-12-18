@@ -1,5 +1,13 @@
 package vitro.pageobject;
 
+/**
+ * Clase CamposLogin
+ *
+ * clase de tipo enum que contiene el DOM de los elementos del login que componen la aplicación
+ *
+ * @author paco
+ * @version 1.0
+ */
 public enum CamposLogin {
 
     INP_IDENTIFIER("txtId"),

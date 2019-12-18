@@ -8,8 +8,23 @@ import vitro.pageobject.CamposMenu;
 import vitro.utilidad.Base;
 import vitro.utilidad.UtilSelenium;
 
+/**
+ * Clase LoginService
+ * Contiene la descripción detallada de los pasos a realizar en la clase Login
+ *
+ * @author paco
+ * @version 1.0
+ */
 public class LoginService extends Base {
 
+    /**
+     * Pasos para logarse en la aplicación
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param app url de la aplicación
+     * @param identifier identificador para acceder a la aplicación
+     * @param user usuario para acceder a la aplicación
+     * @param pass contraseña para acceder a la aplicación
+     */
     public void login(UtilSelenium utilSelenium, String app, String identifier, String user, String pass) {
         utilSelenium.getLogger().info("-- LOGIN - INICIO");
         try {
@@ -33,6 +48,10 @@ public class LoginService extends Base {
         }
     }
 
+    /**
+     * Pasos para salir de la aplicación
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     */
     public void logout(UtilSelenium utilSelenium) {
         boolean correcto = Boolean.FALSE;
         try {

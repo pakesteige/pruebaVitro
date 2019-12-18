@@ -10,8 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerDriverService;
 import org.openqa.selenium.ie.InternetExplorerOptions;
@@ -27,26 +25,42 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Clase UtilSelenium
+ *
+ * Clase para manejar selenium webdriver
+ * @author paco
+ * @version 1.0
+ */
 public class UtilSelenium extends Base {
 
+    // variables globales
     private static final String PATHRESOURCES = "seleniumdriver/";
     private static final String DRIVERCHROME = "driverchrome";
-    private static final String DRIVERFIREFOX = "driverfirefox";
     private static final String DRIVERIE = "driverie";
     private static final String VESIONDEFAULTCHROME = "chromedriver-78.0.3904.105";
     private static final String VERSIONDEFAULTIE = "IEDriverServer";
-    private static final String VERSIONDEFAULTFIREFOX = "geckodriver-v0.26.0";
     private static final String EXTENSIONWIN = ".exe";
     private static final String EXTENSIONLIN = ".linux";
     private static final String CHROME = "chrome";
-    private static final String FIREFOX = "firefox";
     private static final String IEXPLORER = "internet explorer";
 
+    /**
+     * variable para manejar el selenium webdriver
+     */
     private WebDriver driver;
-    private static UtilSelenium instancia = null;
-    private DesiredCapabilities capability;
-    private int numPaso = 0;
 
+    /**
+     * variable del tipo de la clase para utilizar el patrón singleton
+     */
+    private static UtilSelenium instancia = null;
+
+    /**
+     * Constructor privado con 3 parámetros que según el navegador y la versión inicializará el selenium webdriver
+     * @param nombreLogger nombre del log
+     * @param browser navegador
+     * @param version versión del selenium webdriver
+     */
     private UtilSelenium(String nombreLogger, String browser, String version) {
         super(nombreLogger);
 
@@ -57,23 +71,32 @@ public class UtilSelenium extends Base {
             case IEXPLORER:
                 seleniumIE(version);
                 break;
-            case FIREFOX:
-                seleniumFirefox(version);
-                break;
             default:
                 seleniumChrome(null);
                 break;
         }
     }
 
+    /**
+     * Devuelve el objeto webdriver
+     * @return driver: objeto de tipo webdriver
+     */
     public WebDriver getDriver() {
         return driver;
     }
 
+    /**
+     * Modifica el valor del webdriver
+     * @param driver: objeto de tipo webdriver
+     */
     public void setDriver(WebDriver driver) {
         this.driver = driver;
     }
 
+    /**
+     * Inicializa el webdriver para el navegador chrome
+     * @param version: versión del webdriver a utilizar
+     */
     private void seleniumChrome(String version) {
         version = seleccionarDriverSeleniumChrome(version);
 
@@ -100,6 +123,11 @@ public class UtilSelenium extends Base {
         params[0] = WebDriver.class;
     }
 
+    /**
+     * Busca en el paquete src/main/resources/seleniumdriver el webdriver según la versión en el navegador chrome
+     * @param driverSeleniumSO: versión a buscar
+     * @return devuelve la ruta del webdriver
+     */
     private String seleccionarDriverSeleniumChrome(String driverSeleniumSO) {
         String aux;
         driverSeleniumSO = Objects.toString(driverSeleniumSO, "");
@@ -111,6 +139,12 @@ public class UtilSelenium extends Base {
         return aux;
     }
 
+    /**
+     * Comnprueba si existe la versión del selenium webdriver en el navegador chrome
+     * @param version: versión a buscar del selenium webdriver
+     * @param extension: extensión utilizada según el sistema operativo
+     * @return devuelve la ruta del fichero
+     */
     private String existeFicherDriverSeleniumChrome(String version, String extension) {
         File fichero = new File(PATHRESOURCES.concat(version.concat(extension)));
         if (!fichero.exists()) {
@@ -119,6 +153,10 @@ public class UtilSelenium extends Base {
         return PATHRESOURCES.concat(version.concat(extension));
     }
 
+    /**
+     * Para inicializar el webdriver para internet explorer
+     * @param version: versión del selenium webdriver
+     */
     private void seleniumIE(String version) {
         version = seleccionarDriverSeleniumIE(version);
 
@@ -138,6 +176,11 @@ public class UtilSelenium extends Base {
         params[0] = WebDriver.class;
     }
 
+    /**
+     * Busca en el paquete src/main/resources/seleniumdriver el webdriver según la versión en el navegador internet explorer
+     * @param driverSeleniumSO: versión a buscar
+     * @return devuelve la ruta del webdriver
+     */
     private String seleccionarDriverSeleniumIE(String driverSeleniumSO) {
         String aux;
         driverSeleniumSO = Objects.toString(driverSeleniumSO, "");
@@ -149,6 +192,12 @@ public class UtilSelenium extends Base {
         return aux;
     }
 
+    /**
+     * Comnprueba si existe la versión del selenium webdriver en el navegador internet explorer
+     * @param version: versión a buscar del selenium webdriver
+     * @param extension: extensión utilizada según el sistema operativo
+     * @return devuelve la ruta del fichero
+     */
     private String existeFicherDriverSeleniumIE(String version, String extension) {
         File fichero = new File(PATHRESOURCES.concat(version.concat(extension)));
         if (!fichero.exists()) {
@@ -157,49 +206,15 @@ public class UtilSelenium extends Base {
         return PATHRESOURCES.concat(version.concat(extension));
     }
 
-    private void seleniumFirefox(String version) {
-        version = seleccionarDriverSeleniumFirefox(version);
-        guardarBinario(version, FIREFOX);
-
-        File ficheroDriver = new File(rutaBinarioDriver(FIREFOX));
-        if (ficheroDriver.setExecutable(Boolean.TRUE)) {
-            getLogger().error("ERROR AL DAR PERMISOS");
-        }
-        System.setProperty("webdriver.gecko.driver", rutaBinarioDriver(FIREFOX));
-        setDriver(new FirefoxDriver());
-        getDriver().manage().window().maximize();
-        getDriver().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        Class[] params = new Class[1];
-        params[0] = WebDriver.class;
-    }
-
-    private String seleccionarDriverSeleniumFirefox(String driverSeleniumSO) {
-        String aux;
-        driverSeleniumSO = Objects.toString(driverSeleniumSO, "");
-        if (Boolean.TRUE.equals(estoyEnWindows())) {
-            aux = existeFicherDriverSeleniumFirefox(driverSeleniumSO, EXTENSIONWIN);
-        } else {
-            aux = existeFicherDriverSeleniumFirefox(driverSeleniumSO, EXTENSIONLIN);
-        }
-        return aux;
-    }
-
-    private String existeFicherDriverSeleniumFirefox(String version, String extension) {
-        File fichero = new File(PATHRESOURCES.concat(version.concat(extension)));
-        if (!fichero.exists()) {
-            version = VERSIONDEFAULTFIREFOX;
-        }
-        return PATHRESOURCES.concat(version.concat(extension));
-    }
-
+    /**
+     * Configuración del webdriver
+     * @param browser: navegador
+     * @param version: version del webdriver
+     * @return dc: configuración
+     */
     private DesiredCapabilities getCapabilitiesByBrowser(String browser, String version) {
         DesiredCapabilities dc = null;
         switch (browser) {
-            case FIREFOX:
-                dc = DesiredCapabilities.firefox();
-                dc.setCapability(FirefoxDriver.PROFILE, getFirefoxDriverProfile());
-                System.setProperty("webdriver.gecko.driver", version);
-                break;
             case CHROME:
                 dc = DesiredCapabilities.chrome();
                 dc.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
@@ -229,32 +244,13 @@ public class UtilSelenium extends Base {
         return dc;
     }
 
-    private FirefoxProfile getFirefoxDriverProfile() {
-
-        FirefoxProfile myProfile = new FirefoxProfile();
-        myProfile.setPreference("browser.download.folderList", 2);
-        myProfile.setPreference("browser.download.manager.showWhenStarting", false);
-        myProfile.setPreference("browser.download.dir", rutaDirectorioLog());
-        myProfile.setPreference("browser.helperApps.neverAsk.openFile",
-                "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
-        myProfile.setPreference("browser.helperApps.neverAsk.saveToDisk",
-                "text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,application/pdf,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
-        myProfile.setPreference("browser.helperApps.alwaysAsk.force", false);
-        myProfile.setPreference("browser.download.manager.alertOnEXEOpen", false);
-        myProfile.setPreference("browser.download.manager.focusWhenStarting", false);
-        myProfile.setPreference("browser.download.manager.useWindow", false);
-        myProfile.setPreference("browser.download.manager.showAlertOnComplete", false);
-        myProfile.setPreference("browser.download.manager.closeWhenDone", false);
-
-        // Deshabilitar configuración Acrobat
-        myProfile.setPreference("pdfjs.disabled", true);
-        // Desactivar Acrobat plugin que previsualiza PDFs en Firefox
-        myProfile.setPreference("plugin.scan.Acrobat", "99.0");
-        myProfile.setPreference("plugin.scan.plid.all", false);
-
-        return myProfile;
-    }
-
+    /**
+     * Patrón singleton, si no hay instancia del objeto (UtilSelenium) instancia la crea
+     * @param nombreLogger: nombre del log
+     * @param browser: navegador
+     * @param version: versión del webdriver
+     * @return instancia: objeto del tipo UtilSelenium
+     */
     public static UtilSelenium getInstancia(String nombreLogger, String browser, String version) {
         try {
             if (instancia == null) {
@@ -266,10 +262,17 @@ public class UtilSelenium extends Base {
         }
     }
 
+    /**
+     * Constructor por defecto
+     * @return
+     */
     public static UtilSelenium getUtilSelenium() {
         return instancia;
     }
 
+    /**
+     * Cerrar el driver
+     */
     public void cerrarDriver() {
         try {
             if (getDriver() != null && StringUtils.isNotBlank(getDriver().getWindowHandle())) {
@@ -281,10 +284,18 @@ public class UtilSelenium extends Base {
         }
     }
 
+    /**
+     * Finalizar la instancia del objeto UtilSelenium
+     */
     private static void finalizaInstancia() {
         instancia = null;
     }
 
+    /**
+     * para crear el fichero webdriver en nuestra máquina
+     * @param version
+     * @param browser
+     */
     private void guardarBinario(String version, String browser) {
         try {
             URL url = Resources.getResource(version);
@@ -295,6 +306,11 @@ public class UtilSelenium extends Base {
         }
     }
 
+    /**
+     * Devuelve la ruta del fichero según el navegador
+     * @param browser: navegador
+     * @return ruta del webdriver
+     */
     private String rutaBinarioDriver(String browser) {
         String binarioBrowser = "";
 
@@ -305,9 +321,6 @@ public class UtilSelenium extends Base {
             case IEXPLORER:
                 binarioBrowser = DRIVERIE;
                 break;
-            case FIREFOX:
-                binarioBrowser = DRIVERFIREFOX;
-                break;
             default:
                 binarioBrowser = DRIVERCHROME;
                 break;
@@ -315,6 +328,14 @@ public class UtilSelenium extends Base {
         return rutaDirectorioLog() + binarioBrowser;
     }
 
+    /**
+     * Pregunta si existe el elemento
+     * @param by: DOM del elemento a buscar
+     * @return <ul>
+     *     <li>true: el elemento existe</li>
+     *     <li>false: el elemento no existe</li>
+     * </ul>
+     */
     public boolean isElementPresent(By by) {
         try {
             this.getDriver().findElement(by);
@@ -324,6 +345,15 @@ public class UtilSelenium extends Base {
         }
     }
 
+    /**
+     * Busca el elemento según el texto que tenga entre el elemento buscado
+     * @param by: DOM del elemento
+     * @param texto: texto contenido entre el elemento buscado
+     * @return <ul>
+     *     <li>true: existe el elemento buscado</li>
+     *     <li>false: no existe el elemento buscado</li>
+     * </ul>
+     */
     public boolean buscarElementoPorTexto(By by, String texto) {
         Boolean encontrado = Boolean.FALSE;
         try {
@@ -343,6 +373,11 @@ public class UtilSelenium extends Base {
         return encontrado;
     }
 
+    /**
+     * Hacer click en un elemento buscado por el texto contenido entre dicho elemento
+     * @param by: DOM del elemento
+     * @param texto: texto contenido por el elemento buscado
+     */
     public void click(By by, String texto) {
         Boolean encontrado = Boolean.FALSE;
         try {
@@ -364,6 +399,10 @@ public class UtilSelenium extends Base {
         }
     }
 
+    /**
+     * Esperar hasta que un elemento sea invisible
+     * @param locator: DOM del elemento
+     */
     public void esperarHastaElementoInvisible(By locator) {
         try {
             if (this.isElementPresent(locator)) {
@@ -375,6 +414,10 @@ public class UtilSelenium extends Base {
         }
     }
 
+    /**
+     * Esperar hasta que un elemento sea visible
+     * @param locator: DOM del elemento
+     */
     public void esperarHastaElementoVisible(By locator) {
         try {
             WebDriverWait wait = new WebDriverWait(this.getDriver(), 30L);
@@ -384,9 +427,13 @@ public class UtilSelenium extends Base {
         }
     }
 
+    /**
+     * Esperar un cierto tiempo
+     * @param segundos: tiempo de espera
+     */
     public void esperarSegundos(long segundos) {
         try {
-            synchronized(this.getDriver()) {
+            synchronized (this.getDriver()) {
                 this.getDriver().wait(segundos * 1000L);
             }
         } catch (InterruptedException var6) {
