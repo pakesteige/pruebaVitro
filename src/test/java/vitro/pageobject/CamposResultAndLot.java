@@ -1,5 +1,13 @@
 package vitro.pageobject;
 
+/**
+ * Clase CamposResultAndLot
+ *
+ * clase de tipo enum que contiene el DOM de los elementos del menu Result And Lot que componen la aplicación
+ *
+ * @author paco
+ * @version 1.0
+ */
 public enum CamposResultAndLot {
 
     INP_LAPDEPINST("ctl09_cbpLab_cbxLab_I"),

@@ -7,8 +7,18 @@ import vitro.pageobject.CamposMenu;
 import vitro.utilidad.Base;
 import vitro.utilidad.UtilSelenium;
 
+/**
+ * Clase MenuService
+ * Describe los pasos detallados a realizar de la clase Menu
+ */
 public class MenuService extends Base {
 
+    /**
+     * Navega hasta el segundo nivel del menú superior
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param menu primer nivel del menu
+     * @param opcion segundo nivel del menu
+     */
     public void navegar(UtilSelenium utilSelenium, String menu, String opcion) {
         utilSelenium.getLogger().info("-- NAVEGAR AL MENÚ " + menu + " Y ELEGIR LA OPCIÓN " + opcion + " - INICIO");
         try {
@@ -34,8 +44,13 @@ public class MenuService extends Base {
         }
     }
 
+    /**
+     * Acceder al widget del menú lateral
+     * @param utilSelenium variable para interactuar con el webdrive y el log
+     * @param widget widget al que se accede
+     */
     public void navegarWidget(UtilSelenium utilSelenium, String widget) {
-        utilSelenium.getLogger().info("-- NAVEGAR A WIDGET " + widget + " - INICIO");
+       utilSelenium.getLogger().info("-- NAVEGAR A WIDGET " + widget + " - INICIO");
         try {
             utilSelenium.getLogger().info("Click en el widget " + widget);
             utilSelenium.getDriver().findElement(By.xpath("//img[@title='" + widget + "']")).click();
@@ -49,6 +64,11 @@ public class MenuService extends Base {
         }
     }
 
+    /**
+     * Devuelve el elemento del widget que le pasemos por parámetro
+     * @param widget widget al que se accede
+     * @return devuelve el elemento del widget
+     */
     private String seMuestraWidget(String widget) {
         String campo = "";
         switch (widget) {

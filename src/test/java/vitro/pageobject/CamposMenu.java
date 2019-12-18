@@ -1,5 +1,13 @@
 package vitro.pageobject;
 
+/**
+ * Clase CamposMenu
+ *
+ * clase de tipo enum que contiene el DOM de los elementos del menu superior que componen la aplicación
+ *
+ * @author paco
+ * @version 1.0
+ */
 public enum CamposMenu {
 
     LI_MENU("//li[contains(@class, 'dxm-item')]//span"),
