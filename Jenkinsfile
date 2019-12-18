@@ -38,6 +38,7 @@ pipeline {
 
             }
         }
+<<<<<<< HEAD
         stage('Testing') {
             steps {
                 try {
@@ -62,5 +63,8 @@ pipeline {
             }
 
         }
+=======
+
+>>>>>>> release/1.0.3
     }
 }
