@@ -30,6 +30,7 @@ public class LoginService extends Base {
         try {
             utilSelenium.getLogger().info("Navegar a la aplicación ".concat(app));
             utilSelenium.getDriver().get(app);
+            utilSelenium.esperarSegundos(20);
             utilSelenium.getLogger().info("Introducir identificador ".concat(identifier));
             utilSelenium.getDriver().findElement(By.id(CamposLogin.INP_IDENTIFIER.getTexto())).sendKeys(identifier);
             utilSelenium.getLogger().info("Introducir usuario ".concat(user));
