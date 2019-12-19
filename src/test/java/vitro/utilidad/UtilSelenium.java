@@ -105,7 +105,7 @@ public class UtilSelenium extends Base {
         File ficheroDriver = new File(rutaBinarioDriver(CHROME));
 
         if (ficheroDriver.setExecutable(Boolean.TRUE)) {
-            getLogger().error("ERROR AL DAR PERMISOS");
+            getLogger().debug("no hace falta darle permisos");
         }
         DesiredCapabilities desiredCapabilities = getCapabilitiesByBrowser(CHROME, rutaBinarioDriver(CHROME));
 
