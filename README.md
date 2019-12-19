@@ -4,6 +4,7 @@
 - [Estructura](#estructura)
 - [Prerequisitos](#prerequisitos)
 - [Serenity](#serenity)
+- [Sikulix](#sikulix)
 - [Jenkins](#jenkins)
 
 ###Descripción
@@ -28,5 +29,14 @@ La documentación del proyecto creada con javadoc está en la ruta target\site\d
 ###Serenity
 Se ha integrado la prueba con Serenity para la presentación del resultado del test, el resultado se guardará en el directorio target\site\serenity de la carpeta del proyecto
 
+###Sikulix
+Se ha utilizado sikulix para hacer click en el botón aceptar en caso de que salte el mensaje de resolución al inicio de la aplicación.
+
 ###Jenkins
-Fichero de tipo pipeline Jenkinsfile para lanzar la tarea programada de tipo pipeline desde jenkins
+Para lanzar la prueba con Jenkins hay que configurar un Job de tipo Maven con la siguiente configuración:
+- Configurar el apartado origen del código fuente con Git, usando el repositorio https://github.com/pakesteige/pruebaVitro.git y la rama master
+- Configurar el apartado Proyecto con el fichero pom.xml y el comando el siguente:
+> clean install org.jacoco:jacoco-maven-plugin:prepare-agent  test -Dmaven.javadoc.skip=true -fae -Dmaven.test.failure.ignore=false -Dtest=vitro.testrunner.Runner
+
+En caso de querer lanzar la prueba con el comando Maven desde linea de comando 
+>mvn -f pom.xml clean install org.jacoco:jacoco-maven-plugin:prepare-agent  test -Dmaven.javadoc.skip=true -fae -Dmaven.test.failure.ignore=false -Dtest=vitro.testrunner.Runner
