@@ -2,6 +2,8 @@ package vitro.step;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
+import org.sikuli.script.FindFailed;
+import org.sikuli.script.Screen;
 import org.springframework.util.Assert;
 import vitro.pageobject.CamposLogin;
 import vitro.pageobject.CamposMenu;
@@ -27,10 +29,14 @@ public class LoginService extends Base {
      */
     public void login(UtilSelenium utilSelenium, String app, String identifier, String user, String pass) {
         utilSelenium.getLogger().info("-- LOGIN - INICIO");
+        Screen pantalla = new Screen();
         try {
             utilSelenium.getLogger().info("Navegar a la aplicación ".concat(app));
             utilSelenium.getDriver().get(app);
-            utilSelenium.esperarSegundos(20);
+            // Si muestra el mensaje de resolucion utiliza sikulix para hacer click en el botón aceptar
+            if (pantalla.exists("src/test/resources/resolucion.png", 1) != null) {
+                pantalla.find("src/test/resources/resolucion.png").click();
+            }
             utilSelenium.getLogger().info("Introducir identificador ".concat(identifier));
             utilSelenium.getDriver().findElement(By.id(CamposLogin.INP_IDENTIFIER.getTexto())).sendKeys(identifier);
             utilSelenium.getLogger().info("Introducir usuario ".concat(user));
@@ -42,6 +48,9 @@ public class LoginService extends Base {
             utilSelenium.esperarHastaElementoInvisible(By.id(CamposLogin.DIV_LOADING.getTexto()));
             Assert.isTrue(utilSelenium.isElementPresent(By.xpath(CamposMenu.IMG_PRINCIPAL.getTexto())), "Error al acceder a la aplicación");
         } catch (ElementNotVisibleException e) {
+            utilSelenium.getLogger().error("-- LOGIN - " + e.getMessage() + " - ERROR", e);
+            Assert.isTrue(Boolean.FALSE, "-- LOGIN - " + e.getMessage() + " - ERROR");
+        } catch (FindFailed e) {
             utilSelenium.getLogger().error("-- LOGIN - " + e.getMessage() + " - ERROR", e);
             Assert.isTrue(Boolean.FALSE, "-- LOGIN - " + e.getMessage() + " - ERROR");
         } finally {
